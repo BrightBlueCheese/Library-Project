@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- get_flashed_messages is a function from flash -->
+{% for message in get_flashed_messages() %} 
+    <!-- https://getbootstrap.com/docs/5.1/components/alerts/ -->
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
+
+
+<!-- if name exists -->
+{% if name %}
+    <div class="container-lg">
+        <div class="card" style="width: 50rem;margin:0 auto;">
+            <h2 class="card-header" style="text-align:center;">
+                Welcome To Elice Library
+                <a href="{{url_for('main')}}" class="btn btn-outline-primary">Main</a> 
+                <a href="{{url_for('signin')}}" class="btn btn-outline-info">Signin</a>
+            </h2>
+            <img src="https://source.unsplash.com/weekly?library/1600x1000" class="card-img-top" alt="random library image from Unsplash">
+            <div class="card-body">
+            <p class="card-text"></p>
+            
+        </div>
+    </div>
+{% else %} 
+    <h1>Signing Up</h1>
+    <br/>
+    <div class="shadow p-3 mb-5 bg-body rounded">
+        <form action="" method="POST">
+            {{ form.hidden_tag() }}
+
+            {{ form.member_email.label(
+                class="form-label"
+            ) }}
+            {{ form.member_email(
+                class="form-control"
+            ) }}
+            <br/>
+
+            {{ form.name.label(
+                class="form-label"
+            ) }}
+            {{ form.name(
+                class="form-control"
+            ) }}
+            <br>
+
+            {{ form.password_hash.label(
+                class="form-label"
+            ) }}
+            {{ form.password_hash(
+                class="form-control"
+            ) }}
+            <br/>
+
+            {{ form.password_hash2.label(
+                class="form-label"
+            ) }}
+            {{ form.password_hash2(
+                class="form-control"
+            ) }}
+            <br/>
+
+            {{ form.submit(
+                class="btn btn-secondary"
+            ) }}
+        </form>
+    </div>
+
+{% endif %}
+
+{% endblock %}

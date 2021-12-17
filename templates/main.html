@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- get_flashed_messages is a function from flash -->
+{% for message in get_flashed_messages() %} 
+    <!-- https://getbootstrap.com/docs/5.1/components/alerts/ -->
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+<div class="container-lg container-fluid">
+    <!-- https://getbootstrap.com/docs/5.1/components/card/ gridcard -->
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+    {% for book in book_list.items %}
+
+    <div class="col">
+    <div class="card h-100" style="width: 18rem;">
+        <a href="{{ url_for('book_info', id=book.id) }}">
+            <img src="/static/images/{{ book.id }}.jpg" class="card-img-top" style="height:16vw" alt="elice library book{{ book.id }}">
+        </a>
+        <div class="card-body">
+        <h5 class="card-title">{{book.title}}</h5><br>
+        <p class="card-text overflow-wrap h-75">{{book.description[:150]}}...</p>
+        </div>
+        <ul class="list-group list-group-flush">
+        <li class="list-group-item">{{ b_author[book.id-1][1] }}</li>
+
+        {% if scores[book.id-1][1] == None %}
+        <li class="list-group-item">Book Not Reviewed Yet</li>
+        
+        {% else %}
+        <li class="list-group-item">Score: {{ "%.1f"|format(scores[book.id-1][1]) }} </li>
+        {% endif %}
+
+    </div>
+    </div>
+
+    {% endfor %}
+</div>
+<br><br>
+    <nav aria-label="this is a pagination">
+        <ul class="pagination justify-content-center">
+            {% if book_list.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('main', page=1) }}">&laquo First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('main', page=book_list.prev_num) }}">Previous</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link">Previous</a>
+            </li>
+            {% endif %}
+
+            {% if not book_list.has_next %}
+            <li class="page-item" aria-current="page">
+                <a class="page-link" href="{{ url_for('main', page=page-2) }}">
+                    {{ page-2 }}
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('main', page=page-1) }}">
+                    {{ page-1 }}
+                </a>
+            </li>
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="{{ url_for('main', page=page) }}">
+                    {{ page }}
+                </a>
+            </li>
+            {% elif not book_list.has_prev %}
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="{{ url_for('main', page=page) }}">
+                    {{ page }}
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('main', page=page+1) }}">
+                    {{ page+1 }}
+                </a>
+            </li>
+            <li class="page-item" aria-current="page">
+                <a class="page-link" href="{{ url_for('main', page=page+2) }}">
+                    {{ page+2 }}
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('main', page=page-1) }}">
+                    {{ page-1 }}
+                </a>
+            </li>
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="{{ url_for('main', page=page) }}">
+                    {{ page }}
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('main', page=page+1) }}">
+                    {{ page+1 }}
+                </a>
+            </li>
+            {% endif %}
+
+            {% if book_list.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('main', page=book_list.next_num) }}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('main', page=book_list.pages) }}">Last &raquo</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link">Next</a>
+            </li>
+            {% endif %}
+            
+        </ul>
+    </nav>
+</div>
+
+
+{% endblock %}

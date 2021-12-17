@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- get_flashed_messages is a function from flash -->
+{% for message in get_flashed_messages() %} 
+    <!-- https://getbootstrap.com/docs/5.1/components/alerts/ -->
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}  
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+<br><br>
+
+<div class="shadow p-3 mb-5 bg-body rounded">
+
+    <h2>{{ comment.title }}</h2>
+    <small>
+        <!-- poster is the backref variable of the relationship -->
+        Book: {{ comment.book_c.title }} <br>
+        By: {{ comment.member_c.name }} <br>
+        {{ comment.update_date }} <br>
+        Score: {{ comment.score }}
+        
+    </small> 
+    <br><br>
+    <!-- ckeditor -->
+    {{ comment.content|safe }} <br><br>
+    <a href="{{ url_for('comments') }}"
+    class="btn btn-outline-secondary btn-sm">Back to Blog</a>
+
+    <!-- Display only if ids matches each other -->
+    {% if comment.member_id == current_user.id %}
+    {#<a href="{{ url_for('comment_post', id=comment.id) }}" 
+    class="btn btn-outline-secondary btn-sm">Edit comment</a>
+    <a href="{{ url_for('comment_post', id=comment.id) }}" 
+    class="btn btn-outline-danger btn-sm">Delete comment</a>#}
+    {% endif %}
+</div>
+<br>
+
+
+
+{% endblock %}

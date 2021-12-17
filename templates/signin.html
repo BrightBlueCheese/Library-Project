@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- get_flashed_messages is a function from flash -->
+{% for message in get_flashed_messages() %} 
+    <!-- https://getbootstrap.com/docs/5.1/components/alerts/ -->
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
+<!-- if name exists -->
+
+    <h1>Sign In</h1>
+
+
+    <div class="shadow p-3 mb-5 bg-body rounded">
+        <form action="" method="POST">
+            <!-- hidden_tag is a function that creates csrf token -->
+            <!-- form. came from func def() - render_template - form -->
+            <!-- and that form came from the class UserForm -->
+            {{ form.hidden_tag() }}
+
+            {{ form.member_email.label(
+                class="form-label"
+            ) }}
+            {{ form.member_email(
+                class="form-control"
+            ) }}
+            <br/>
+
+            {{ form.password.label(
+                class="form-label"
+            ) }}
+            {{ form.password(
+                class="form-control"
+            ) }}
+            <br/>
+
+            {{ form.submit(
+                class="btn btn-secondary"
+            ) }}
+        </form>
+    </div>
+    <table class="table table-hover table-bordered table-striped">
+        {% for member_i in member_list %}
+            <tr>
+                <td>
+                    {{member_i.id}}.  <a href="{{ url_for('update', id=member_i.id) }}">{{ member_i.name }}</a>  -  {{member_i.member_email}} 
+                    <a href="{{ url_for('delete', id=member_i.id) }}">Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

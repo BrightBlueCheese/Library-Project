@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- get_flashed_messages is a function from flash -->
+{% for message in get_flashed_messages() %} 
+    <!-- https://getbootstrap.com/docs/5.1/components/alerts/ -->
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+<div class="container-lg container-fluid"></div>
+<div class="position-relative"></div>
+    <div class="card mb-3 position-absolute top-1 start-50 translate-middle-x" style="width: 80%">
+        <div class="row g-0">
+        <div class="col-md-4">
+            <img src="/static/images/{{ book.id }}.jpg" class="img-fluid rounded-start" alt="...">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+            
+            <h5 class="card-title">{{ book.title }}</h5>
+            <p> {{ the_b_author }}</p>
+            {% if current_user.is_authenticated %}
+                <div class="d-grid gap-2 d-md-flex justify-content-md">
+                
+                <a href="{{url_for('add_comment', id=book.id)}}" class="btn btn-outline-primary btn-sm">Write a Review</a> 
+                &emsp;&emsp;&emsp;
+                
+                <form action="{{ url_for('rent') }}" method="POST" class="form-inline">
+                    <button type="submit" name="rent" value="{{ book.id }}" class="btn btn-outline-success btn-sm">Borrow</button>
+                </form>
+                
+                
+                <form action="{{ url_for('return_back') }}" method="POST" class="form-inline">
+                    <button type="submit" name="return" value="{{ book.id }}" class="btn btn-outline-info btn-sm">Return This Book</button>
+                </form>
+                
+            {% else %}
+                
+                <a href="{{url_for('signin')}}" class="btn btn-outline-primary btn-sm">Write a Review</a>
+                
+            {% endif %}
+                
+            </div>
+            <br>
+            {# This Below should be modified #}
+            
+            {% if  score[1] != None %}
+        
+            <p class="card-text">Score: {{ "%.1f"|format(score[1]) }} </p>
+            {% else %}
+            <p class="card-text">Book Not Reviewed Yet</li>
+            {% endif %}
+            <p class="card-text">{{ book.description }}</p>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- For flask ckEditor -->
+<!-- https://flask-ckeditor.readthedocs.io/en/latest/basic.html#installation -->
+
+<!-- get_flashed_messages is a function from flash -->
+{% for message in get_flashed_messages() %} 
+    <!-- https://getbootstrap.com/docs/5.1/components/alerts/ -->
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}  
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
+{% if current_user.is_authenticated %}
+    <h1>Add Comment</h1>
+    <br/>
+    <div class="shadow p-3 mb-5 bg-body rounded">
+        <form action="" method="POST">
+            {{ form.hidden_tag() }}
+
+            {{ form.title.label(
+                class="form-label"
+            ) }}
+            {{ form.title(
+                class="form-control"
+            ) }}
+            <br/>
+            {{ form.score.label(
+                class="form-label"
+            ) }}
+            {{ form.score(
+                class="form-control" 
+            ) }}
+
+            {{ form.content.label(
+                class="form-label"
+            ) }}
+            {{ form.content(
+                class="form-control", rows="12"
+            ) }}
+            <!-- rows indicates howbig the size of the TextField -->
+            <br/>
+
+            {{ form.submit(
+                class="btn btn-secondary"
+            ) }}
+        </form>
+
+        <!-- CKEDITOR -->
+        {{ ckeditor.load() }}
+        {{ ckeditor.config(name='content') }}
+        <!-- the content from the texteditor would just display the rough makrdown-like code strings. So you have to put '| safe' right next to the post.conetent. -->
+        <!-- check the comment 'ckeidor' in posts.html and post.html to see how to do that  -->
+        <!-- and edit_post.html -->
+    </div>
+
+{% endif %}
+
+
+{% endblock %}

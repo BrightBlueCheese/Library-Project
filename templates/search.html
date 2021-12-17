@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <br>
+    <h2>You Searched For - {{ searched }}</h2>
+    <br>
+    
+    {% for comment in comment_list.items %}
+    <div class="shadow p-3 mb-3 bg-body rounded">
+
+    <h2><a href="{{ url_for('comment', id=comment.id) }}" class="link-secondary text-decoration-none">{{ comment.title }}</a></h2>
+    <small>
+        <!-- poster is the backref variable of the relationship -->
+        Book: {{ comment.book_c.title }} <br>
+        By: {{ comment.member_c.name }} &nbsp &nbsp &nbsp &nbsp {{ comment.update_date }} 
+        Score: {{ comment.score }}
+    </small> 
+    <br><br>
+    <a href="{{ url_for('comment', id=comment.id) }}" 
+    class="btn btn-outline-primary btn-sm">View Comment</a>
+
+    <!-- display those following btn when ids match -->
+    {% if comment.member_id == current_user.id %}
+    <a href="{{ url_for('edit_comment', id=comment.id) }}" 
+    class="btn btn-outline-secondary btn-sm">Edit Comment</a>
+    <a href="{{ url_for('delete_comment', id=comment.id) }}" 
+    class="btn btn-outline-danger btn-sm">Delete comment</a>
+    {% endif %}
+
+</div>
+<br>
+{% endfor %}
+<nav aria-label="this is a pagination">
+    <ul class="pagination justify-content-center">
+        {% if comment_list.has_prev %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('comments', page=1) }}">&laquo First</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('comments', page=comments.prev_num) }}">Previous</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link">Previous</a>
+        </li>
+        {% endif %}
+
+
+
+        {% if comment_list.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('comments', page=comments.next_num) }}">Next</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('comments', page=comments.pages) }}">Last &raquo</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link">Next</a>
+        </li>
+        {% endif %}
+        
+    </ul>
+</nav>
+
+{% endblock %}

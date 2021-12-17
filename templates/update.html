@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- get_flashed_messages is a function from flash -->
+{% for message in get_flashed_messages() %} 
+    <!-- https://getbootstrap.com/docs/5.1/components/alerts/ -->
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
+
+
+<!-- if name exists -->
+{% if id == current_user.id %}
+
+    <h1>Update User...</h1>
+    <br/><br>
+    ID To Update: {{ id }} <br>
+    Current Id : {{ current_user.id }}
+    <div class="card">
+        <div class="card-header">
+            Update Profile
+        </div>
+        <div class="card-body">
+            <form action="/update/{{ current_user.id }}" method="POST">
+                {{ form.hidden_tag() }}
+    
+                {{ form.name.label(
+                    class="form-label"
+                ) }}
+
+                {{ form.name(
+                    class="form-control", value=member_update.name
+                ) }}
+                <br/>
+    
+    
+                {{ form.submit(
+                    class="btn btn-secondary btn-sm"
+                ) }}
+    
+            </form>
+        </div>
+{% else %}
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        Sorry! You Can't Edit This User...
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <h2>Access Denied!</h2>
+    <p>Sorry, You can only edit yours...</p>
+
+{% endif %}
+    
+{% endblock %}
